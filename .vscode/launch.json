@@ -1,0 +1,29 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "🐍 Run Honeypot Server",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/run_honeypot.py",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}"
+      },
+      "justMyCode": true
+    },
+    {
+      "name": "📊 Generate Session Report",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/generate_report.py",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}"
+      },
+      "justMyCode": true
+    }
+  ]
+}
