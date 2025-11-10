@@ -215,7 +215,12 @@ with tabs[1]:
     if "dst_port" not in df.columns or df["dst_port"].dropna().empty:
         st.info("No destination port data available")
     else:
-        ports = df["dst_port"].dropna().astype(int).value_counts().reset_index().rename(columns={"index":"port","dst_port":"count"})
+        ports_vc = df["dst_port"].dropna().astype(int).value_counts().reset_index()
+        # pandas 2.0+ names the value_counts result as 'count', so rename it explicitly
+        if "count" in ports_vc.columns:
+            ports = ports_vc.rename(columns={"dst_port": "port"})
+        else:
+            ports = ports_vc.rename(columns={"index":"port", ports_vc.columns[1]: "count"})
         st.plotly_chart(px.bar(ports, x="port", y="count", title="Top Destination Ports"), use_container_width=True)
 with tabs[2]:
     if "timestamp" not in df.columns or df["timestamp"].isna().all():
