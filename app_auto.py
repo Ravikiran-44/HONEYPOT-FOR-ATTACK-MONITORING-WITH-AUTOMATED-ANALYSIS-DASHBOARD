@@ -12,6 +12,58 @@ ROOT = Path(__file__).parent
 OUT_CSV = ROOT / "output" / "honeypot_sessions.csv"
 MERGE_SCRIPT = ROOT / "merge_sessions.py"
 
+# Attack advice mapping
+ATTACK_ADVICE = {
+    "bruteforce": {
+        "description": "Repeated login attempts / credential guessing",
+        "how_attacker_got_in": "Service exposed (SSH/FTP) with weak or reused credentials.",
+        "recommendations": [
+            "Disable password authentication; use SSH keys.",
+            "Enforce strong password policy and lockout after N attempts.",
+            "Rate limit / fail2ban on authentication endpoints.",
+            "Move service behind VPN or allowlist known IPs."
+        ]
+    },
+    "recon": {
+        "description": "Port scans or information discovery",
+        "how_attacker_got_in": "Exposed ports and responses revealed services and banners.",
+        "recommendations": [
+            "Minimize exposed ports, close unused services.",
+            "Use port knocking / require auth for service banners.",
+            "Deploy network IDS to detect scanning behavior.",
+            "Harden service banners and enable minimal responses."
+        ]
+    },
+    "exploit": {
+        "description": "Exploit / payload delivery attempts",
+        "how_attacker_got_in": "Vulnerable service or software with known CVE or remote command execution.",
+        "recommendations": [
+            "Patch and update vulnerable software immediately.",
+            "Isolate risky services in restricted networks (segmentation).",
+            "Use WAF for web services and intrusion prevention systems.",
+            "Run services with least privilege; containerize legacy apps."
+        ]
+    },
+    "malware": {
+        "description": "Malware or ransomware behavior",
+        "how_attacker_got_in": "Malicious payload execution via exploit or phishing.",
+        "recommendations": [
+            "Block outgoing connections to C2 by default.",
+            "Use EDR and periodic scans, restrict file execution paths.",
+            "Backup critical data and test recovery procedures.",
+            "Use strict process whitelisting for servers."
+        ]
+    },
+    "unknown": {
+        "description": "Unknown / unclassified activity",
+        "how_attacker_got_in": "Not enough information to classify.",
+        "recommendations": [
+            "Collect more telemetry (full packet capture, command sequences).",
+            "Increase logging detail for further analysis."
+        ]
+    }
+}
+
 st.set_page_config(layout="wide", page_title="Honeypot Analytics", initial_sidebar_state="expanded")
 
 # 1) attempt to run aggregator (safe: won't crash if script missing)
@@ -85,6 +137,61 @@ def extract_port(val):
             return p
     return None
 
+# GeoIP lookup - try ipinfo API (Option B - simple, internet required)
+def lookup_country_ipinfo(ip):
+    """Lookup country code from ipinfo.io API."""
+    try:
+        import requests
+        url = f"https://ipinfo.io/{ip}/json"
+        r = requests.get(url, timeout=2)
+        if r.ok:
+            j = r.json()
+            return j.get("country")
+    except Exception:
+        pass
+    return None
+
+def enrich_geo(df):
+    """Add src_country column if not present, using ipinfo API."""
+    if "src_country" in df.columns and df["src_country"].notna().any():
+        return df
+    # resolve src_ip -> country
+    vals = []
+    for ip in df.get("src_ip", pd.Series([])).fillna("").astype(str):
+        if not ip or ip == "nan":
+            vals.append(None)
+            continue
+        c = lookup_country_ipinfo(ip)
+        vals.append(c)
+    df["src_country"] = pd.Series(vals, index=df.index)
+    return df
+
+# Robust timestamp parser for mixed formats
+def robust_parse_timestamps(series):
+    """Return DatetimeIndex-friendly series with best-effort parsing."""
+    if series is None:
+        return pd.Series(dtype="datetime64[ns]")
+    s = series.copy().astype(str).replace({"nan":"", "None":"", "NaN":""})
+    # 1) try direct parse
+    dt = pd.to_datetime(s, errors="coerce")
+    # 2) rows still NaT: try numeric epoch seconds or ms
+    need = dt.isna()
+    if need.any():
+        def parse_num(v):
+            try:
+                v2 = float(v)
+            except Exception:
+                return pd.NaT
+            # heuristic: >1e12 likely ms, >1e9 is seconds
+            if v2 > 1e12:
+                return pd.to_datetime(int(v2/1000), unit="s", errors="coerce")
+            if v2 > 1e9:
+                return pd.to_datetime(int(v2), unit="s", errors="coerce")
+            return pd.NaT
+        parsed = s[need].map(parse_num)
+        dt.loc[need] = parsed.values
+    return dt
+
 # Basic attack type heuristic using events text/commands
 def infer_attack_type_from_events(ev):
     # ev could be JSON-string, python-list-string, or plain text: normalize to string
@@ -118,14 +225,20 @@ def normalize_honeypot_data(df):
     for cand in ("dst_port","dpt","port","dest_port"):
         if cand in col_lower:
             rename_map[col_lower[cand]] = "dst_port"; break
-    for cand in ("timestamp","time","start_ts","start_time"):
+    for cand in ("timestamp","time","start_ts","start_time","end_time"):
         if cand in col_lower:
             rename_map[col_lower[cand]] = "timestamp"; break
     if rename_map:
         df = df.rename(columns=rename_map)
-    # coerce timestamp
+    # coerce timestamp using robust parser
     if "timestamp" in df.columns:
-        df["timestamp"] = pd.to_datetime(df["timestamp"], errors="coerce", infer_datetime_format=True)
+        df["timestamp"] = robust_parse_timestamps(df["timestamp"])
+    else:
+        # try fallback columns often used: end_time, start_ts
+        for cand in ("end_time","start_ts","start_time","time"):
+            if cand in df.columns:
+                df["timestamp"] = robust_parse_timestamps(df[cand])
+                break
     # dst_port extraction
     if "dst_port" in df.columns:
         df["dst_port"] = df["dst_port"].map(extract_port)
@@ -158,6 +271,7 @@ if uploaded is not None:
     try:
         df = pd.read_csv(uploaded)
         df = normalize_honeypot_data(df)
+        df = enrich_geo(df)  # Add geo enrichment
         st.sidebar.success(f"Loaded uploaded CSV ({len(df)} rows)")
     except Exception as e:
         st.sidebar.error("Failed to load uploaded file: " + str(e))
@@ -166,6 +280,7 @@ if df is None and OUT_CSV.exists():
     try:
         df = pd.read_csv(OUT_CSV)
         df = normalize_honeypot_data(df)
+        df = enrich_geo(df)  # Add geo enrichment
         st.sidebar.info(f"Loaded {OUT_CSV} ({len(df)} rows)")
     except Exception as e:
         st.sidebar.error("Failed to read output CSV: " + str(e))
@@ -177,6 +292,7 @@ if df is None and use_demo:
                      "src_ip":f"10.9.{i%255}.{(i*3)%255}", "dst_port": int(np.random.choice([22,80,443,8080,23]))})
     df = pd.DataFrame(rows)
     df = normalize_honeypot_data(df)
+    df = enrich_geo(df)  # Add geo enrichment (will cache IPs if available)
     st.sidebar.info("Using demo dataset")
 
 if df is None:
@@ -203,7 +319,7 @@ st.markdown("### First rows")
 st.dataframe(df.head(20), use_container_width=True)
 
 st.markdown("### Attack analysis")
-tabs = st.tabs(["Attack Types","Ports","Timeline","Geography","Raw Data"])
+tabs = st.tabs(["Attack Types","Ports","Timeline","Geography","Attack Insights","Raw Data"])
 with tabs[0]:
     if "attack_type" not in df.columns:
         st.info("No attack_type column found")
@@ -224,18 +340,41 @@ with tabs[1]:
         st.plotly_chart(px.bar(ports, x="port", y="count", title="Top Destination Ports"), use_container_width=True)
 with tabs[2]:
     if "timestamp" not in df.columns or df["timestamp"].isna().all():
-        st.info("No timestamps")
+        st.info("No timestamps available for time-series")
     else:
-        ts = df.set_index("timestamp").resample("H").size().reset_index(name="count")
-        st.plotly_chart(px.line(ts, x="timestamp", y="count", title="Sessions over time"), use_container_width=True)
+        # Use 'h' instead of deprecated 'H'
+        ts = df.set_index("timestamp").resample("h").size().reset_index(name="count")
+        if not ts.empty and len(ts) > 0:
+            st.plotly_chart(px.line(ts, x="timestamp", y="count", title="Sessions per hour"), use_container_width=True)
+        else:
+            st.info("No valid timestamp data for time-series")
 with tabs[3]:
-    if "src_country" in df.columns:
+    if "src_country" in df.columns and df["src_country"].notna().any():
         s = df['src_country'].fillna("UNKNOWN").value_counts().reset_index()
         s.columns = ["country","count"]
         st.plotly_chart(px.bar(s, x="country", y="count", title="Top source countries"), use_container_width=True)
     else:
-        st.info("No geo data")
+        st.info("No geo data available (run GeoIP enrichment)")
 with tabs[4]:
+    st.markdown("### 🔎 Attack Insights & Recommendations")
+    if "attack_type" not in df.columns:
+        st.warning("No 'attack_type' column — attempting to infer from events.")
+        df["attack_type"] = df.get("events", "").apply(infer_attack_type_from_events)
+    attack_counts = df["attack_type"].value_counts().reset_index()
+    attack_counts.columns = ["attack_type","count"]
+    col1, col2 = st.columns(2)
+    with col1:
+        st.dataframe(attack_counts, use_container_width=True)
+    with col2:
+        selected = st.selectbox("Select attack type for recommendations", attack_counts["attack_type"])
+        info = ATTACK_ADVICE.get(selected, ATTACK_ADVICE["unknown"])
+        st.subheader(f"📋 {selected.upper()}")
+        st.markdown(f"**{info['description']}**")
+        st.markdown(f"**How attacker got in:** {info['how_attacker_got_in']}")
+        st.markdown("**Recommended actions:**")
+        for r in info["recommendations"]:
+            st.markdown(f"- {r}")
+with tabs[5]:
     st.dataframe(df.head(500), use_container_width=True)
 
 st.markdown("---")
