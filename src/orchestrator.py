@@ -20,9 +20,32 @@ from .evidence_store import save_payload_to_session_dir  # saver
 HOST, PORT = "127.0.0.1", 2222
 URL_RE = re.compile(r'(https?://[^\s]+)', re.IGNORECASE)
 
+
 def extract_url(text):
     m = URL_RE.search(text)
     return m.group(1) if m else None
+
+
+def append_struct_event(sdir, evdict):
+    """
+    Append a structured event to session meta.
+    We store it as a special text event with a JSON payload for compatibility:
+       {"ts": timestamp, "text": "[STRUCT_EVENT]={...json...}"}
+    """
+    if "ts" not in evdict:
+        evdict["ts"] = time.time()
+    # ensure values are JSON-serializable
+    try:
+        json.dumps(evdict)
+    except Exception:
+        # fallback: convert problematic values to string
+        for k, v in list(evdict.items()):
+            try:
+                json.dumps(v)
+            except Exception:
+                evdict[k] = str(v)
+    append_event(sdir, {"ts": evdict["ts"], "text": f"[STRUCT_EVENT]={json.dumps(evdict)}"})
+
 
 class Orchestrator:
     def __init__(self, host=HOST, port=PORT):
@@ -81,17 +104,54 @@ class Orchestrator:
                     label, conf = classify(features)
                     eng = decide_engagement(label, conf)
 
+                    # Create structured classification event
+                    low = text.lower()
+                    if "wget " in low or "curl " in low:
+                        vector = "download"
+                    elif "ssh " in low or "scp " in low:
+                        vector = "ssh"
+                    else:
+                        vector = "command"
+
+                    struct_class = {
+                        "type": "classification",
+                        "label": label,
+                        "confidence": float(conf),
+                        "vector": vector,
+                        "src_ip": addr[0],
+                        "src_port": addr[1],
+                        "engagement": eng,
+                        "summary": f"{label.upper()} ({vector}) — conf {float(conf):.2f}, ENG={eng}"
+                    }
+                    append_struct_event(sdir, struct_class)
+
+                    # keep legacy class event for compatibility
                     append_event(sdir, {"ts": time.time(), "text": f"[CLASS]={label}|{conf}|ENG={eng}"})
 
                     # detect download attempts (wget/curl heuristics)
-                    low = text.lower()
                     forced_handoff = ("wget " in low) or ("curl " in low)
 
                     if forced_handoff:
                         url = extract_url(text) or text.strip()
                         try:
                             payload_bytes = (url or "").encode("utf-8", errors="ignore")
-                            meta_payload = save_payload_to_session_dir(sdir, payload_bytes, name=f"payload_handoff_{int(time.time())}.bin")
+                            meta_payload = save_payload_to_session_dir(
+                                sdir, payload_bytes, name=f"payload_handoff_{int(time.time())}.bin"
+                            )
+                            # structured payload event
+                            struct_payload = {
+                                "type": "payload_saved",
+                                "file": meta_payload.get("file"),
+                                "path": meta_payload.get("path"),
+                                "sha256": meta_payload.get("sha256"),
+                                "size": meta_payload.get("size"),
+                                "saved_ts": meta_payload.get("saved_ts"),
+                                "src_ip": addr[0],
+                                "src_port": addr[1],
+                                "summary": "Payload saved from suspected download"
+                            }
+                            append_struct_event(sdir, struct_payload)
+                            # legacy payload event
                             append_event(sdir, {"ts": time.time(), "text": f"[PAYLOAD_SAVED]={meta_payload}"})
                         except Exception as e:
                             append_event(sdir, {"ts": time.time(), "text": f"[ERROR]=PAYLOAD_SAVE_FAILED|{e}"})

