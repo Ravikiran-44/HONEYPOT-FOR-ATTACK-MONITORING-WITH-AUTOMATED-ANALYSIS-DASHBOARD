@@ -1,97 +1,150 @@
 ﻿# app_auto.py — stable honeypot dashboard (watcher + normalizer)
-import streamlit as st
+import importlib, os, time
+from pathlib import Path
 import pandas as pd
 import numpy as np
+import re
+import streamlit as st
 import plotly.express as px
 import plotly.graph_objects as go
-from pathlib import Path
-import time, re
+
+ROOT = Path(__file__).parent
+OUT_CSV = ROOT / "output" / "honeypot_sessions.csv"
+MERGE_SCRIPT = ROOT / "merge_sessions.py"
 
 st.set_page_config(layout="wide", page_title="Honeypot Analytics", initial_sidebar_state="expanded")
 
-OUTPUT_CSV = Path("output/honeypot_sessions.csv")
-POLL_SECS = 3.0
+# 1) attempt to run aggregator (safe: won't crash if script missing)
+try:
+    if MERGE_SCRIPT.exists():
+        # import as module to reuse functions if available
+        spec = importlib.util.spec_from_file_location("merge_sessions", str(MERGE_SCRIPT))
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        # call gather_and_merge if present
+        if hasattr(mod, "gather_and_merge"):
+            try:
+                mod.gather_and_merge()
+            except Exception:
+                # ignore any runtime error from aggregator; continue to load existing CSV
+                pass
+except Exception:
+    pass
 
-# ---------------------
-# Simple watcher: force rerun when output CSV mtime changes
-# ---------------------
+# 2) simple CSV watcher stored in session_state
 if "watcher_mtime" not in st.session_state:
     st.session_state["watcher_mtime"] = None
 
-def check_reload():
-    if OUTPUT_CSV.exists():
-        m = OUTPUT_CSV.stat().st_mtime
+def maybe_reload_from_csv():
+    if OUT_CSV.exists():
+        m = OUT_CSV.stat().st_mtime
         prev = st.session_state.get("watcher_mtime")
+        # first run: set mtime but don't force rerun
         if prev is None:
             st.session_state["watcher_mtime"] = m
         elif m != prev:
             st.session_state["watcher_mtime"] = m
+            # try preferred rerun
             try:
                 if hasattr(st, "experimental_rerun"):
                     st.experimental_rerun()
+                    return
             except Exception:
-                st.experimental_set_query_params(_t=str(time.time()))
+                pass
+            # fallback: tweak query params
+            try:
+                params = st.experimental_get_query_params()
+                params["_refresh"] = [str(time.time())]
+                st.experimental_set_query_params(**params)
+            except Exception:
+                st.session_state["_need_manual_refresh"] = not st.session_state.get("_need_manual_refresh", False)
+                st.stop()
 
-check_reload()
+maybe_reload_from_csv()
+# small yield
+time.sleep(0.01)
 
-# ---------------------
-# Normalizer
-# ---------------------
+# 3) Normalizer / extractor used across app
+PORT_RE = re.compile(r"(\d{1,5})")
+def extract_port(val):
+    if pd.isna(val): return None
+    if isinstance(val, (int, np.integer)): return int(val)
+    s = str(val)
+    # common "ip:port" patterns
+    if ":" in s:
+        tail = s.rsplit(":", 1)[-1]
+        if tail.isdigit(): return int(tail)
+    # "tcp/2222" etc
+    if "/" in s:
+        tail = s.rsplit("/", 1)[-1]
+        if tail.isdigit(): return int(tail)
+    m = PORT_RE.search(s)
+    if m:
+        p = int(m.group(1))
+        if 0 < p < 65536:
+            return p
+    return None
+
+# Basic attack type heuristic using events text/commands
+def infer_attack_type_from_events(ev):
+    # ev could be JSON-string, python-list-string, or plain text: normalize to string
+    if pd.isna(ev): return "unknown"
+    s = str(ev).lower()
+    # quick heuristics (tweak to your needs)
+    if any(k in s for k in ("wget ", "curl ", "download ", "exploit", "payload", "meterpreter", "reverse")):
+        return "exploit"
+    if any(k in s for k in ("nmap", "masscan", "scan", "port scan", "syn scan", "sweep")):
+        return "recon"
+    if any(k in s for k in ("password", "login", "ssh", "bruteforce", "failed password", "authentication")):
+        return "bruteforce"
+    if any(k in s for k in ("uname", "id ", "whoami", "ls ", "pwd", "hostname", "cat /etc")):
+        return "recon"
+    if any(k in s for k in ("ransom", "encrypt", "encrypting", "locky", "cerber")):
+        return "malware"
+    # fallback
+    return "unknown"
+
 def normalize_honeypot_data(df):
-    if df is None:
-        return df
+    if df is None: return df
     df = df.copy()
-    df.rename(columns={c: c.strip() for c in df.columns}, inplace=True)
-    lowermap = {c.lower(): c for c in df.columns}
+    # safe normalize column names (strip/trailing)
+    df.columns = [c.strip() for c in df.columns]
+    # map common names
+    col_lower = {c.lower(): c for c in df.columns}
     rename_map = {}
-    for cand in ("src","src_ip","source_ip","saddr"):
-        if cand in lowermap:
-            rename_map[lowermap[cand]] = "src_ip"
-            break
-    for cand in ("dst","dst_ip","destination_ip","daddr"):
-        if cand in lowermap:
-            rename_map[lowermap[cand]] = "dst_ip"
-            break
-    for cand in ("dst_port","dpt","dest_port","port","dstport"):
-        if cand in lowermap:
-            rename_map[lowermap[cand]] = "dst_port"
-            break
-    for cand in ("timestamp","time","datetime"):
-        if cand in lowermap:
-            rename_map[lowermap[cand]] = "timestamp"
-            break
+    for cand in ("src_ip","source","src"):
+        if cand in col_lower:
+            rename_map[col_lower[cand]] = "src_ip"; break
+    for cand in ("dst_port","dpt","port","dest_port"):
+        if cand in col_lower:
+            rename_map[col_lower[cand]] = "dst_port"; break
+    for cand in ("timestamp","time","start_ts","start_time"):
+        if cand in col_lower:
+            rename_map[col_lower[cand]] = "timestamp"; break
     if rename_map:
         df = df.rename(columns=rename_map)
-
-    port_re = re.compile(r"(\d{1,5})")
-    def extract_port(v):
-        if pd.isna(v): 
-            return None
-        if isinstance(v, (int, float)) and not np.isnan(v): 
-            return int(v)
-        s = str(v)
-        if ":" in s:
-            tail = s.rsplit(":", 1)[-1]
-            if tail.isdigit(): 
-                return int(tail)
-        if "/" in s:
-            tail = s.rsplit("/", 1)[-1]
-            if tail.isdigit(): 
-                return int(tail)
-        if s.isdigit(): 
-            return int(s)
-        m = port_re.search(s)
-        if m:
-            p = int(m.group(1))
-            if 0 < p < 65536: 
-                return p
-        return None
-
-    if "dst_port" in df.columns:
-        df["dst_port"] = df["dst_port"].apply(extract_port)
-        df["dst_port"] = pd.to_numeric(df["dst_port"], errors="coerce").astype("Int64")
+    # coerce timestamp
     if "timestamp" in df.columns:
         df["timestamp"] = pd.to_datetime(df["timestamp"], errors="coerce", infer_datetime_format=True)
+    # dst_port extraction
+    if "dst_port" in df.columns:
+        df["dst_port"] = df["dst_port"].map(extract_port)
+    else:
+        # try candidate columns that may contain port info
+        for c in df.columns:
+            if any(k in c.lower() for k in ("port","dpt","dest","conn","endpoint")):
+                df["dst_port"] = df[c].map(extract_port)
+                if df["dst_port"].notna().any():
+                    break
+    # ensure numeric int dtype
+    if "dst_port" in df.columns:
+        df["dst_port"] = pd.to_numeric(df["dst_port"], errors="coerce").astype("Int64")
+    # infer attack_type if not present
+    if "attack_type" not in df.columns:
+        if "events" in df.columns:
+            df["attack_type"] = df["events"].apply(infer_attack_type_from_events)
+        else:
+            df["attack_type"] = "unknown"
     return df
 
 # ---------------------
@@ -109,11 +162,11 @@ if uploaded is not None:
     except Exception as e:
         st.sidebar.error("Failed to load uploaded file: " + str(e))
 
-if df is None and OUTPUT_CSV.exists():
+if df is None and OUT_CSV.exists():
     try:
-        df = pd.read_csv(OUTPUT_CSV)
+        df = pd.read_csv(OUT_CSV)
         df = normalize_honeypot_data(df)
-        st.sidebar.info(f"Loaded {OUTPUT_CSV} ({len(df)} rows)")
+        st.sidebar.info(f"Loaded {OUT_CSV} ({len(df)} rows)")
     except Exception as e:
         st.sidebar.error("Failed to read output CSV: " + str(e))
 
