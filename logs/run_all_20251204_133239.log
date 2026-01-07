@@ -1,0 +1,17 @@
+﻿2025-12-04 13:32:39	=== run_all.ps1 START ===
+2025-12-04 13:32:39	Using python: C:\project\.venv\Scripts\python.exe
+Requirement already satisfied: pip in c:\project\.venv\lib\site-packages (25.3)
+python.exe : ERROR: Could not open requirements file: [Errno 2] No such file or directory: 
+'C:\\project\\requirements.txt'
+At C:\project\run_all.ps1:31 char:5
++     & $py -m pip install -r (Join-Path $ProjectDir "requirements.txt" ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (ERROR: Could no...quirements.txt':String) [], RemoteEx 
+   ception
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+2025-12-04 13:32:49	Stopped old python PID:6992
+2025-12-04 13:32:49	Starting honeypot (backend/run_honeypot.py) -> C:\project\logs\honeypot.log
+2025-12-04 13:32:50	Starting Streamlit -> C:\project\logs\streamlit.log
+2025-12-04 13:32:53	Attempted to open browser to http://127.0.0.1:8501
+2025-12-04 13:32:53	=== run_all.ps1 END ===

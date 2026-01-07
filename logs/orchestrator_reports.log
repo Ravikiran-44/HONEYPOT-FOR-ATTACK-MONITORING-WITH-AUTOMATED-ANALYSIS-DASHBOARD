@@ -1,0 +1,31 @@
+2025-11-10 17:45:55,879 INFO Exported sessions to CSV: C:\project\out\sessions_latest.csv
+2025-11-10 17:45:55,879 INFO generate_reports background thread started.
+2025-11-10 17:45:55,880 INFO Starting generate_reports: C:\project\.venv\Scripts\python.exe C:\project\generate_reports.py --input C:\project\out\sessions_latest.csv --outdir C:\project\out
+2025-11-10 17:45:57,983 WARNING generate_reports returned code 1 on attempt 1. Will retry.
+2025-11-10 17:46:01,811 WARNING generate_reports returned code 1 on attempt 2. Will retry.
+2025-11-10 17:46:05,796 WARNING generate_reports returned code 1 on attempt 3. Will retry.
+2025-11-10 17:46:07,797 ERROR generate_reports failed after 2 attempts. Check C:\project\out\report_run_1762776955.log
+2025-11-10 23:21:41,561 ERROR Error while attempting to export sessions and spawn report generator
+Traceback (most recent call last):
+  File "C:\project\src\orchestrator.py", line 272, in handle_client
+    except Exception as e:
+               ^^^^^^^^^^^
+  File "C:\project\src\export_sessions.py", line 92, in sessions_to_csv
+    Path(tmp_path).rename(output_csv)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\Pooja\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py", line 767, in rename
+    os.rename(self, target)
+    ~~~~~~~~~^^^^^^^^^^^^^^
+FileExistsError: [WinError 183] Cannot create a file when that file already exists: 'C:\\project\\out\\sessions_latest.csv.tmp' -> 'C:\\project\\out\\sessions_latest.csv'
+2025-11-10 23:27:14,168 ERROR Error while attempting to export sessions and spawn report generator
+Traceback (most recent call last):
+  File "C:\project\src\orchestrator.py", line 288, in handle_client
+    if sessions_to_csv(sessions_dir, sessions_csv):
+       ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\project\src\export_sessions.py", line 92, in sessions_to_csv
+    Path(tmp_path).rename(output_csv)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\Pooja\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py", line 767, in rename
+    os.rename(self, target)
+    ~~~~~~~~~^^^^^^^^^^^^^^
+FileExistsError: [WinError 183] Cannot create a file when that file already exists: 'C:\\project\\out\\sessions_latest.csv.tmp' -> 'C:\\project\\out\\sessions_latest.csv'

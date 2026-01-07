@@ -8,6 +8,10 @@ import threading
 import time
 import json
 import re
+import os
+import subprocess
+import logging
+import sys
 from pathlib import Path
 
 from .session_manager import new_session, append_event, close_session
@@ -15,7 +19,7 @@ from .interaction_engine import banner_for, fake_response_for
 from .feature_extractor import extract_features
 from .classifier import classify
 from .policy_engine import decide_engagement
-from .evidence_store import save_payload_to_session_dir  # saver
+from .evidence_store import save_payload_to_session_dir, save_session_data  # saver
 
 HOST, PORT = "127.0.0.1", 2222
 URL_RE = re.compile(r'(https?://[^\s]+)', re.IGNORECASE)
@@ -47,6 +51,76 @@ def append_struct_event(sdir, evdict):
     append_event(sdir, {"ts": evdict["ts"], "text": f"[STRUCT_EVENT]={json.dumps(evdict)}"})
 
 
+# --- report generator spawn helper ----------------------------------
+BASE_DIR = Path(__file__).resolve().parents[1]
+LOGS_DIR = BASE_DIR / "logs"
+LOGS_DIR.mkdir(parents=True, exist_ok=True)
+
+logger = logging.getLogger("orchestrator")
+if not logger.handlers:
+    handler = logging.FileHandler(str(LOGS_DIR / "orchestrator_reports.log"))
+    handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(message)s"))
+    logger.addHandler(handler)
+    logger.setLevel(logging.INFO)
+
+
+def _spawn_report_generator(input_path: str, out_dir: str, max_retries: int = 2):
+    """
+    Spawn generate_reports.py in background using the current Python interpreter.
+    Writes logs to out_dir/report_run_<timestamp>.log and avoids concurrent runs with a lock file.
+    Non-blocking: starts thread and returns immediately.
+    """
+    def _runner():
+        lockfile = Path(out_dir) / ".generate_reports.lock"
+        try:
+            # simple lock to prevent parallel runs
+            if lockfile.exists():
+                logger.info("generate_reports: lockfile exists, skipping new run.")
+                return
+            lockfile.write_text(str(time.time()))
+            timestamp = int(time.time())
+            logfile = Path(out_dir) / f"report_run_{timestamp}.log"
+            cmd = [
+                sys.executable,
+                str(BASE_DIR / "generate_reports.py"),
+                "--input", str(input_path),
+                "--outdir", str(out_dir)
+            ]
+            logger.info("Starting generate_reports: %s", " ".join(cmd))
+            attempt = 0
+            while attempt <= max_retries:
+                attempt += 1
+                try:
+                    # run synchronously but in background thread so orchestrator keeps working
+                    with open(logfile, "ab") as lf:
+                        proc = subprocess.Popen(cmd, stdout=lf, stderr=lf)
+                        ret = proc.wait()
+                    if ret == 0:
+                        logger.info("generate_reports completed successfully (attempt %d). log=%s", attempt, logfile)
+                        break
+                    else:
+                        logger.warning("generate_reports returned code %s on attempt %d. Will retry.", ret, attempt)
+                        time.sleep(2)
+                except Exception as e:
+                    logger.exception("Exception running generate_reports (attempt %d): %s", attempt, e)
+                    time.sleep(2)
+            else:
+                logger.error("generate_reports failed after %d attempts. Check %s", max_retries, logfile)
+        finally:
+            try:
+                if lockfile.exists():
+                    lockfile.unlink()
+            except Exception:
+                pass
+
+    # Launch background thread
+    t = threading.Thread(target=_runner, daemon=True)
+    t.start()
+    logger.info("generate_reports background thread started.")
+
+# ---------------------------------------------------------------------
+
+
 class Orchestrator:
     def __init__(self, host=HOST, port=PORT):
         self.host = host
@@ -59,7 +133,23 @@ class Orchestrator:
 
     def handle_client(self, conn, addr):
         sid, sdir = new_session(addr[0], addr[1])
-        print(f"[INFO] Session {sid} started for {addr[0]}:{addr[1]}")
+        
+        # Get instance name from environment if running in VM
+        instance_name = os.environ.get('HONEYPOT_INSTANCE_NAME', 'default')
+        
+        # Create session metadata
+        session_meta = {
+            "session_id": sid,
+            "src_ip": addr[0],
+            "src_port": addr[1],
+            "start_ts": time.time(),
+            "instance": instance_name
+        }
+        
+        # Save initial session data to both JSON and CSV
+        save_session_data(sdir, session_meta)
+        
+        print(f"[INFO] Session {sid} started for {addr[0]}:{addr[1]} on instance {instance_name}")
         try:
             # send service banner (may fail if client disconnects quickly)
             try:
@@ -186,6 +276,22 @@ class Orchestrator:
                 close_session(sdir)
             except Exception:
                 pass
+            # Export sessions to CSV and spawn headless report generator
+            try:
+                from .export_sessions import sessions_to_csv
+                out_dir = BASE_DIR / "out"
+                out_dir.mkdir(parents=True, exist_ok=True)
+
+                # Export all session meta.json files to a single CSV
+                sessions_dir = BASE_DIR / "data" / "sessions"
+                sessions_csv = out_dir / "sessions_latest.csv"
+                if sessions_to_csv(sessions_dir, sessions_csv):
+                    logger.info("Exported sessions to CSV: %s", sessions_csv)
+                    _spawn_report_generator(str(sessions_csv), str(out_dir))
+                else:
+                    logger.warning("No session data found to export")
+            except Exception:
+                logger.exception("Error while attempting to export sessions and spawn report generator")
             try:
                 conn.close()
             except Exception:

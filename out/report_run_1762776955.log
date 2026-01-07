@@ -1,0 +1,96 @@
+C:\project\generate_reports.py:2: SyntaxWarning: invalid escape sequence '\p'
+  """
+C:\project\generate_reports.py:257: FutureWarning: The argument 'infer_datetime_format' is deprecated and will be removed in a future version. A strict version of it is now the default, see https://pandas.pydata.org/pdeps/0004-consistent-to-datetime-parsing.html. You can safely remove this argument.
+  df = pd.read_csv(input_csv, parse_dates=['timestamp'], infer_datetime_format=True)
+C:\project\generate_reports.py:82: FutureWarning: 'H' is deprecated and will be removed in a future version, please use 'h' instead.
+  counts = df.resample(freq).size()
+Reading: C:\project\out\sessions_latest.csv
+Traceback (most recent call last):
+  File "C:\project\generate_reports.py", line 314, in <module>
+    out = generate_reports(args.input, args.outdir, top_n_ips=args.top_n_ips, time_freq=args.time_freq)
+  File "C:\project\generate_reports.py", line 289, in generate_reports
+    excel_bytes, agg, df_clean = build_excel_bytes(df)
+                                 ~~~~~~~~~~~~~~~~~^^^^
+  File "C:\project\generate_reports.py", line 206, in build_excel_bytes
+    dfc['rule_boost'] = dfc.apply(compute_rule_boost_row, axis=1)
+                        ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\project\.venv\Lib\site-packages\pandas\core\frame.py", line 10401, in apply
+    return op.apply().__finalize__(self, method="apply")
+           ~~~~~~~~^^
+  File "C:\project\.venv\Lib\site-packages\pandas\core\apply.py", line 916, in apply
+    return self.apply_standard()
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "C:\project\.venv\Lib\site-packages\pandas\core\apply.py", line 1063, in apply_standard
+    results, res_index = self.apply_series_generator()
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\project\.venv\Lib\site-packages\pandas\core\apply.py", line 1081, in apply_series_generator
+    results[i] = self.func(v, *self.args, **self.kwargs)
+                 ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\project\generate_reports.py", line 203, in compute_rule_boost_row
+    if int(r.get('unique_uri', 0)) > 100:
+       ~~~^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: cannot convert float NaN to integer
+C:\project\generate_reports.py:2: SyntaxWarning: invalid escape sequence '\p'
+  """
+C:\project\generate_reports.py:257: FutureWarning: The argument 'infer_datetime_format' is deprecated and will be removed in a future version. A strict version of it is now the default, see https://pandas.pydata.org/pdeps/0004-consistent-to-datetime-parsing.html. You can safely remove this argument.
+  df = pd.read_csv(input_csv, parse_dates=['timestamp'], infer_datetime_format=True)
+C:\project\generate_reports.py:82: FutureWarning: 'H' is deprecated and will be removed in a future version, please use 'h' instead.
+  counts = df.resample(freq).size()
+Reading: C:\project\out\sessions_latest.csv
+Traceback (most recent call last):
+  File "C:\project\generate_reports.py", line 314, in <module>
+    out = generate_reports(args.input, args.outdir, top_n_ips=args.top_n_ips, time_freq=args.time_freq)
+  File "C:\project\generate_reports.py", line 289, in generate_reports
+    excel_bytes, agg, df_clean = build_excel_bytes(df)
+                                 ~~~~~~~~~~~~~~~~~^^^^
+  File "C:\project\generate_reports.py", line 206, in build_excel_bytes
+    dfc['rule_boost'] = dfc.apply(compute_rule_boost_row, axis=1)
+                        ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\project\.venv\Lib\site-packages\pandas\core\frame.py", line 10401, in apply
+    return op.apply().__finalize__(self, method="apply")
+           ~~~~~~~~^^
+  File "C:\project\.venv\Lib\site-packages\pandas\core\apply.py", line 916, in apply
+    return self.apply_standard()
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "C:\project\.venv\Lib\site-packages\pandas\core\apply.py", line 1063, in apply_standard
+    results, res_index = self.apply_series_generator()
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\project\.venv\Lib\site-packages\pandas\core\apply.py", line 1081, in apply_series_generator
+    results[i] = self.func(v, *self.args, **self.kwargs)
+                 ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\project\generate_reports.py", line 203, in compute_rule_boost_row
+    if int(r.get('unique_uri', 0)) > 100:
+       ~~~^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: cannot convert float NaN to integer
+C:\project\generate_reports.py:2: SyntaxWarning: invalid escape sequence '\p'
+  """
+C:\project\generate_reports.py:257: FutureWarning: The argument 'infer_datetime_format' is deprecated and will be removed in a future version. A strict version of it is now the default, see https://pandas.pydata.org/pdeps/0004-consistent-to-datetime-parsing.html. You can safely remove this argument.
+  df = pd.read_csv(input_csv, parse_dates=['timestamp'], infer_datetime_format=True)
+C:\project\generate_reports.py:82: FutureWarning: 'H' is deprecated and will be removed in a future version, please use 'h' instead.
+  counts = df.resample(freq).size()
+Reading: C:\project\out\sessions_latest.csv
+Traceback (most recent call last):
+  File "C:\project\generate_reports.py", line 314, in <module>
+    out = generate_reports(args.input, args.outdir, top_n_ips=args.top_n_ips, time_freq=args.time_freq)
+  File "C:\project\generate_reports.py", line 289, in generate_reports
+    excel_bytes, agg, df_clean = build_excel_bytes(df)
+                                 ~~~~~~~~~~~~~~~~~^^^^
+  File "C:\project\generate_reports.py", line 206, in build_excel_bytes
+    dfc['rule_boost'] = dfc.apply(compute_rule_boost_row, axis=1)
+                        ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\project\.venv\Lib\site-packages\pandas\core\frame.py", line 10401, in apply
+    return op.apply().__finalize__(self, method="apply")
+           ~~~~~~~~^^
+  File "C:\project\.venv\Lib\site-packages\pandas\core\apply.py", line 916, in apply
+    return self.apply_standard()
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "C:\project\.venv\Lib\site-packages\pandas\core\apply.py", line 1063, in apply_standard
+    results, res_index = self.apply_series_generator()
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\project\.venv\Lib\site-packages\pandas\core\apply.py", line 1081, in apply_series_generator
+    results[i] = self.func(v, *self.args, **self.kwargs)
+                 ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\project\generate_reports.py", line 203, in compute_rule_boost_row
+    if int(r.get('unique_uri', 0)) > 100:
+       ~~~^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: cannot convert float NaN to integer

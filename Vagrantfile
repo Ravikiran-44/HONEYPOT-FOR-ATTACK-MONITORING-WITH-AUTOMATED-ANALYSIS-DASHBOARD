@@ -3,7 +3,9 @@ Vagrant.configure("2") do |config|
   config.vm.box = "ubuntu/jammy64"
   config.vm.hostname = "honeypot-vm"
   # create a private network: host-only (192.168.56.*)
-  config.vm.network "private_network", ip: "192.168.56.10"
+  config.vm.network "private_network", ip: "192.168.56.50"
+  # Forward public port 2222 → guest port 2222 (exposed to internet via router)
+  config.vm.network "forwarded_port", guest: 2222, host: 2222, auto_correct: true
   config.vm.provider "virtualbox" do |vb|
     vb.name = "honeypot-vm"
     vb.memory = 4096
