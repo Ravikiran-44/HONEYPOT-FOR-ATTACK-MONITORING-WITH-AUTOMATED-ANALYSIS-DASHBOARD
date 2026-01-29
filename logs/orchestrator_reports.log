@@ -29,3 +29,145 @@ Traceback (most recent call last):
     os.rename(self, target)
     ~~~~~~~~~^^^^^^^^^^^^^^
 FileExistsError: [WinError 183] Cannot create a file when that file already exists: 'C:\\project\\out\\sessions_latest.csv.tmp' -> 'C:\\project\\out\\sessions_latest.csv'
+2026-01-08 14:02:42,816 ERROR Error while attempting to export sessions and spawn report generator
+Traceback (most recent call last):
+  File "C:\project\src\orchestrator.py", line 288, in handle_client
+    if sessions_to_csv(sessions_dir, sessions_csv):
+       ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\project\src\export_sessions.py", line 92, in sessions_to_csv
+    Path(tmp_path).rename(output_csv)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\Pooja\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py", line 767, in rename
+    os.rename(self, target)
+    ~~~~~~~~~^^^^^^^^^^^^^^
+FileExistsError: [WinError 183] Cannot create a file when that file already exists: 'C:\\project\\out\\sessions_latest.csv.tmp' -> 'C:\\project\\out\\sessions_latest.csv'
+2026-01-09 11:58:48,803 ERROR Error while attempting to export sessions and spawn report generator
+Traceback (most recent call last):
+  File "E:\honeypot\src\orchestrator.py", line 288, in handle_client
+    if sessions_to_csv(sessions_dir, sessions_csv):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\honeypot\src\export_sessions.py", line 92, in sessions_to_csv
+    Path(tmp_path).rename(output_csv)
+  File "C:\Users\Ravikiran\AppData\Local\Programs\Python\Python311\Lib\pathlib.py", line 1175, in rename
+    os.rename(self, target)
+FileExistsError: [WinError 183] Cannot create a file when that file already exists: 'E:\\honeypot\\out\\sessions_latest.csv.tmp' -> 'E:\\honeypot\\out\\sessions_latest.csv'
+2026-01-09 11:58:48,975 ERROR Error while attempting to export sessions and spawn report generator
+Traceback (most recent call last):
+  File "E:\honeypot\src\orchestrator.py", line 288, in handle_client
+    if sessions_to_csv(sessions_dir, sessions_csv):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\honeypot\src\export_sessions.py", line 92, in sessions_to_csv
+    Path(tmp_path).rename(output_csv)
+  File "C:\Users\Ravikiran\AppData\Local\Programs\Python\Python311\Lib\pathlib.py", line 1175, in rename
+    os.rename(self, target)
+FileExistsError: [WinError 183] Cannot create a file when that file already exists: 'E:\\honeypot\\out\\sessions_latest.csv.tmp' -> 'E:\\honeypot\\out\\sessions_latest.csv'
+2026-01-09 12:31:29,234 ERROR Error while attempting to export sessions and spawn report generator
+Traceback (most recent call last):
+  File "E:\honeypot\src\orchestrator.py", line 288, in handle_client
+    if sessions_to_csv(sessions_dir, sessions_csv):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\honeypot\src\export_sessions.py", line 92, in sessions_to_csv
+    Path(tmp_path).rename(output_csv)
+  File "C:\Users\Ravikiran\AppData\Local\Programs\Python\Python311\Lib\pathlib.py", line 1175, in rename
+    os.rename(self, target)
+FileExistsError: [WinError 183] Cannot create a file when that file already exists: 'E:\\honeypot\\out\\sessions_latest.csv.tmp' -> 'E:\\honeypot\\out\\sessions_latest.csv'
+2026-01-09 12:31:29,235 ERROR Error while attempting to export sessions and spawn report generator
+Traceback (most recent call last):
+  File "E:\honeypot\src\orchestrator.py", line 288, in handle_client
+    if sessions_to_csv(sessions_dir, sessions_csv):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\honeypot\src\export_sessions.py", line 92, in sessions_to_csv
+    Path(tmp_path).rename(output_csv)
+  File "C:\Users\Ravikiran\AppData\Local\Programs\Python\Python311\Lib\pathlib.py", line 1175, in rename
+    os.rename(self, target)
+FileExistsError: [WinError 183] Cannot create a file when that file already exists: 'E:\\honeypot\\out\\sessions_latest.csv.tmp' -> 'E:\\honeypot\\out\\sessions_latest.csv'
+2026-01-09 12:31:29,962 ERROR Error while attempting to export sessions and spawn report generator
+Traceback (most recent call last):
+  File "E:\honeypot\src\orchestrator.py", line 288, in handle_client
+    if sessions_to_csv(sessions_dir, sessions_csv):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\honeypot\src\export_sessions.py", line 92, in sessions_to_csv
+    Path(tmp_path).rename(output_csv)
+  File "C:\Users\Ravikiran\AppData\Local\Programs\Python\Python311\Lib\pathlib.py", line 1175, in rename
+    os.rename(self, target)
+FileExistsError: [WinError 183] Cannot create a file when that file already exists: 'E:\\honeypot\\out\\sessions_latest.csv.tmp' -> 'E:\\honeypot\\out\\sessions_latest.csv'
+2026-01-11 14:26:40,801 ERROR Error while attempting to export sessions and spawn report generator
+Traceback (most recent call last):
+  File "E:\honeypot\src\orchestrator.py", line 288, in handle_client
+    if sessions_to_csv(sessions_dir, sessions_csv):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\honeypot\src\export_sessions.py", line 92, in sessions_to_csv
+    Path(tmp_path).rename(output_csv)
+  File "C:\Users\Ravikiran\AppData\Local\Programs\Python\Python311\Lib\pathlib.py", line 1175, in rename
+    os.rename(self, target)
+FileExistsError: [WinError 183] Cannot create a file when that file already exists: 'E:\\honeypot\\out\\sessions_latest.csv.tmp' -> 'E:\\honeypot\\out\\sessions_latest.csv'
+2026-01-11 14:26:41,360 ERROR Error while attempting to export sessions and spawn report generator
+Traceback (most recent call last):
+  File "E:\honeypot\src\orchestrator.py", line 288, in handle_client
+    if sessions_to_csv(sessions_dir, sessions_csv):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\honeypot\src\export_sessions.py", line 92, in sessions_to_csv
+    Path(tmp_path).rename(output_csv)
+  File "C:\Users\Ravikiran\AppData\Local\Programs\Python\Python311\Lib\pathlib.py", line 1175, in rename
+    os.rename(self, target)
+FileExistsError: [WinError 183] Cannot create a file when that file already exists: 'E:\\honeypot\\out\\sessions_latest.csv.tmp' -> 'E:\\honeypot\\out\\sessions_latest.csv'
+2026-01-20 23:44:39,449 ERROR Error while attempting to export sessions and spawn report generator
+Traceback (most recent call last):
+  File "E:\honeypot\src\orchestrator.py", line 288, in handle_client
+    if sessions_to_csv(sessions_dir, sessions_csv):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\honeypot\src\export_sessions.py", line 92, in sessions_to_csv
+    Path(tmp_path).rename(output_csv)
+  File "C:\Users\Ravikiran\AppData\Local\Programs\Python\Python311\Lib\pathlib.py", line 1175, in rename
+    os.rename(self, target)
+FileExistsError: [WinError 183] Cannot create a file when that file already exists: 'E:\\honeypot\\out\\sessions_latest.csv.tmp' -> 'E:\\honeypot\\out\\sessions_latest.csv'
+2026-01-20 23:44:40,083 ERROR Error while attempting to export sessions and spawn report generator
+Traceback (most recent call last):
+  File "E:\honeypot\src\orchestrator.py", line 288, in handle_client
+    if sessions_to_csv(sessions_dir, sessions_csv):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\honeypot\src\export_sessions.py", line 92, in sessions_to_csv
+    Path(tmp_path).rename(output_csv)
+  File "C:\Users\Ravikiran\AppData\Local\Programs\Python\Python311\Lib\pathlib.py", line 1175, in rename
+    os.rename(self, target)
+FileExistsError: [WinError 183] Cannot create a file when that file already exists: 'E:\\honeypot\\out\\sessions_latest.csv.tmp' -> 'E:\\honeypot\\out\\sessions_latest.csv'
+2026-01-20 23:51:43,866 ERROR Error while attempting to export sessions and spawn report generator
+Traceback (most recent call last):
+  File "E:\honeypot\src\orchestrator.py", line 288, in handle_client
+    if sessions_to_csv(sessions_dir, sessions_csv):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\honeypot\src\export_sessions.py", line 92, in sessions_to_csv
+    Path(tmp_path).rename(output_csv)
+  File "C:\Users\Ravikiran\AppData\Local\Programs\Python\Python311\Lib\pathlib.py", line 1175, in rename
+    os.rename(self, target)
+FileExistsError: [WinError 183] Cannot create a file when that file already exists: 'E:\\honeypot\\out\\sessions_latest.csv.tmp' -> 'E:\\honeypot\\out\\sessions_latest.csv'
+2026-01-20 23:51:44,520 ERROR Error while attempting to export sessions and spawn report generator
+Traceback (most recent call last):
+  File "E:\honeypot\src\orchestrator.py", line 288, in handle_client
+    if sessions_to_csv(sessions_dir, sessions_csv):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\honeypot\src\export_sessions.py", line 92, in sessions_to_csv
+    Path(tmp_path).rename(output_csv)
+  File "C:\Users\Ravikiran\AppData\Local\Programs\Python\Python311\Lib\pathlib.py", line 1175, in rename
+    os.rename(self, target)
+FileExistsError: [WinError 183] Cannot create a file when that file already exists: 'E:\\honeypot\\out\\sessions_latest.csv.tmp' -> 'E:\\honeypot\\out\\sessions_latest.csv'
+2026-01-20 23:52:29,005 ERROR Error while attempting to export sessions and spawn report generator
+Traceback (most recent call last):
+  File "E:\honeypot\src\orchestrator.py", line 288, in handle_client
+    if sessions_to_csv(sessions_dir, sessions_csv):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\honeypot\src\export_sessions.py", line 92, in sessions_to_csv
+    Path(tmp_path).rename(output_csv)
+  File "C:\Users\Ravikiran\AppData\Local\Programs\Python\Python311\Lib\pathlib.py", line 1175, in rename
+    os.rename(self, target)
+FileExistsError: [WinError 183] Cannot create a file when that file already exists: 'E:\\honeypot\\out\\sessions_latest.csv.tmp' -> 'E:\\honeypot\\out\\sessions_latest.csv'
+2026-01-20 23:52:29,689 ERROR Error while attempting to export sessions and spawn report generator
+Traceback (most recent call last):
+  File "E:\honeypot\src\orchestrator.py", line 288, in handle_client
+    if sessions_to_csv(sessions_dir, sessions_csv):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\honeypot\src\export_sessions.py", line 92, in sessions_to_csv
+    Path(tmp_path).rename(output_csv)
+  File "C:\Users\Ravikiran\AppData\Local\Programs\Python\Python311\Lib\pathlib.py", line 1175, in rename
+    os.rename(self, target)
+FileExistsError: [WinError 183] Cannot create a file when that file already exists: 'E:\\honeypot\\out\\sessions_latest.csv.tmp' -> 'E:\\honeypot\\out\\sessions_latest.csv'

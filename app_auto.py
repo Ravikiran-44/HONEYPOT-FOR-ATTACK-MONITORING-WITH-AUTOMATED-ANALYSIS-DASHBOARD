@@ -121,9 +121,9 @@ def maybe_reload_from_csv():
                 pass
             # fallback: tweak query params
             try:
-                params = st.experimental_get_query_params()
-                params["_refresh"] = [str(time.time())]
-                st.experimental_set_query_params(**params)
+                params = st.query_params
+                params["_refresh"] = str(time.time())
+                st.query_params.update(params)
             except Exception:
                 st.session_state["_need_manual_refresh"] = not st.session_state.get("_need_manual_refresh", False)
                 st.stop()

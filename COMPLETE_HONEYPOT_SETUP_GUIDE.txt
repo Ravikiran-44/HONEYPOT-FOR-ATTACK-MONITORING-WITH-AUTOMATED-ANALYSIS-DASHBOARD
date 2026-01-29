@@ -1,0 +1,450 @@
+# ==============================================================================
+# 🚀 HONEYPOT PROJECT - COMPLETE SETUP GUIDE FOR NEW LAPTOP
+# ==============================================================================
+# Generated: January 8, 2026
+# This is EVERYTHING needed to set up the honeypot project from scratch
+# Copy this file to your new laptop and follow the instructions in order
+# ==============================================================================
+
+================================================================================
+📋 QUICK START SUMMARY (For Experienced Users)
+================================================================================
+
+# If you know what you're doing, here's the fast track:
+
+# 1. Install prerequisites
+choco install python git vagrant virtualbox docker-desktop -y
+
+# 2. Clone and setup
+git clone https://github.com/YOUR_USERNAME/honeypot-project.git C:\project
+cd C:\project
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt -r requirements_streamlit.txt joblib paramiko requests cryptography pycryptodome plotly matplotlib networkx xlsxwriter openpyxl geoip2
+
+# 3. Download GeoIP database to data/ folder
+
+# 4. Run system
+.\scripts\run_docker.ps1  # OR .\scripts\run_all.ps1 OR .\scripts\run_demo.bat
+
+# 5. Open dashboard: http://localhost:8501
+
+================================================================================
+🎯 DETAILED STEP-BY-STEP SETUP GUIDE
+================================================================================
+
+## PHASE 1: SYSTEM REQUIREMENTS CHECK
+
+### Minimum Hardware Requirements:
+- Windows 10/11 (64-bit)
+- 8GB RAM minimum (16GB recommended for VMs)
+- 20GB free disk space
+- Internet connection
+
+### Software Prerequisites to Install:
+
+#### Option A: Install Chocolatey (Recommended)
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+
+#### Install Required Software via Chocolatey
+choco install python git vagrant virtualbox docker-desktop -y
+
+#### Option B: Manual Installation (If Chocolatey fails)
+1. Python 3.8+: https://www.python.org/downloads/
+2. Git: https://git-scm.com/downloads
+3. VirtualBox: https://www.virtualbox.org/
+4. Vagrant: https://www.vagrantup.com/
+5. Docker Desktop: https://www.docker.com/products/docker-desktop
+
+### Verify Installations
+python --version      # Should show 3.8 or higher
+git --version         # Should show version info
+vagrant --version     # Should show version info
+docker --version      # Should show version info
+VBoxManage --version  # Should show version info
+
+================================================================================
+## PHASE 2: PROJECT SETUP
+
+### Step 1: Create Project Directory
+mkdir C:\project
+cd C:\project
+
+### Step 2: Clone Repository
+# IMPORTANT: Replace YOUR_USERNAME with your actual GitHub username
+git clone https://github.com/YOUR_USERNAME/honeypot-project.git .
+
+### Step 3: Verify Clone Success
+dir  # Should show project files
+
+================================================================================
+## PHASE 3: PYTHON ENVIRONMENT SETUP
+
+### Step 1: Create Virtual Environment
+python -m venv .venv
+
+### Step 2: Activate Virtual Environment
+.\.venv\Scripts\Activate.ps1
+
+### Step 3: Upgrade Pip
+pip install --upgrade pip
+
+### Step 4: Install Core Dependencies
+pip install -r requirements.txt
+pip install -r requirements_streamlit.txt
+
+### Step 5: Install Additional Required Packages
+pip install joblib paramiko requests cryptography pycryptodome plotly matplotlib networkx xlsxwriter openpyxl geoip2
+
+### Step 6: Verify Python Environment
+python -c "import pandas, numpy, sklearn, streamlit, joblib, paramiko, plotly, matplotlib, geoip2; print('All packages imported successfully')"
+
+================================================================================
+## PHASE 4: GEOIP DATABASE SETUP (REQUIRED)
+
+### IMPORTANT: This database is required for IP geolocation features
+
+### Step 1: Create Free MaxMind Account
+# Go to: https://www.maxmind.com/en/geolite2/signup
+# Create account and confirm email
+
+### Step 2: Download Database
+# Login to MaxMind account
+# Navigate to Downloads section
+# Download: GeoLite2-Country.mmdb (binary format, ~37MB)
+
+### Step 3: Place Database File
+# Copy the downloaded file to:
+# C:\project\data\GeoLite2-Country.mmdb
+
+### Step 4: Verify Database
+if exist "data\GeoLite2-Country.mmdb" (echo GeoIP database found) else (echo WARNING: GeoIP database missing)
+
+================================================================================
+## PHASE 5: VERIFY COMPLETE SETUP
+
+### Run Verification Script
+.\scripts\verify_setup.ps1
+
+### Expected Output:
+# ✓ Python installed: Python 3.x.x
+# ✓ requirements.txt (size info)
+# ✓ scripts/run_all.ps1 (size info)
+# ✓ data/GeoLite2-Country.mmdb (size info)
+# etc.
+
+================================================================================
+## PHASE 6: DEPLOYMENT OPTIONS
+
+### OPTION A: DOCKER CONTAINERS (RECOMMENDED - Fastest)
+cd C:\project
+.\scripts\run_docker.ps1
+
+# What happens:
+# - Downloads Ubuntu Docker images (~100MB each)
+# - Creates 5 honeypot containers (honeypot1-5)
+# - Automatically installs Python + dependencies in each
+# - Starts honeypots on ports 2222-2226
+# - Launches Streamlit dashboard on port 8501
+# - First run: 1-2 minutes
+
+### OPTION B: VAGRANT VIRTUAL MACHINES (Full Isolation)
+cd C:\project
+.\scripts\run_all.ps1
+
+# What happens:
+# - Downloads Ubuntu 22.04 VM image (~500MB)
+# - Creates 5 VirtualBox VMs with 4GB RAM each
+# - Automatically installs Python + dependencies in each
+# - Starts honeypots on ports 2222-2226
+# - Launches Streamlit dashboard on port 8501
+# - First run: 5-10 minutes
+
+### OPTION C: LOCAL DEVELOPMENT ONLY (No VMs)
+cd C:\project
+.\scripts\run_demo.bat
+
+# What happens:
+# - Runs honeypot locally on port 2222
+# - Creates test session data
+# - Launches Streamlit dashboard on port 8501
+# - No VMs required, fastest startup
+
+================================================================================
+## WHAT GETS INSTALLED IN VMs/CONTAINERS
+
+### System Packages (Ubuntu Linux):
+apt-get update -y
+apt-get install -y python3 python3-venv python3-pip git unzip curl build-essential
+
+### Python Environment:
+python3 -m venv venv  # or /venv for containers
+source venv/bin/activate
+pip install --upgrade pip
+pip install -r requirements.txt
+pip install joblib paramiko requests cryptography pycryptodome plotly matplotlib networkx xlsxwriter openpyxl geoip2
+
+### VM/Container Specifications:
+- OS: Ubuntu 20.04 (Docker) / Ubuntu 22.04 (Vagrant)
+- Memory: ~500MB per container / 4GB per VM
+- CPU: 1 core per container / 2 cores per VM
+- Network: Host-only network (192.168.56.x)
+- Ports: 2222-2226 (honeypot SSH), 8501 (dashboard)
+- Storage: Shared project folder mount
+
+================================================================================
+## PHASE 7: ACCESS YOUR HONEYPOT SYSTEM
+
+### Open Dashboard
+# After deployment, open in browser:
+http://localhost:8501
+
+### Dashboard Features:
+- Real-time attack monitoring
+- Geographic attack maps
+- Attack type analysis
+- Session details and forensics
+- Export capabilities
+
+### Check Generated Data
+# Session data appears in:
+dir data\sessions\
+
+# Aggregated CSV:
+type output\honeypot_sessions.csv
+
+# Logs:
+dir logs\
+
+================================================================================
+## PHASE 8: INTERNET EXPOSURE (OPTIONAL - For Real Attacks)
+
+### Step 1: Find Your Router IP
+.\scripts\get_router_ip.ps1
+
+### Step 2: Configure Router Port Forwarding
+# Login to your router admin panel (usually http://192.168.1.1)
+# Find "Port Forwarding" or "NAT" settings
+# Add rule:
+#   - External Port: 2222
+#   - Protocol: TCP
+#   - Internal IP: [Your laptop's IP address]
+#   - Internal Port: 2222
+
+### Step 3: Test Public Exposure
+# Go to: https://canyouseeme.org/
+# Enter port: 2222
+# Click "Check Port"
+# Should show: "Success: I can see your service on port 2222"
+
+### Step 4: Monitor Real Attacks
+.\scripts\monitor_attacks.ps1
+
+================================================================================
+## FILE ORGANIZATION (After Complete Setup)
+
+C:\project\
+├── app_auto.py                    # Main Streamlit dashboard
+├── requirements.txt               # Core Python dependencies
+├── requirements_streamlit.txt     # Streamlit dependency
+├── setup.py                       # Package setup
+├── merge_sessions.DISABLED.py     # Disabled merge script
+├── HONEYPOT_SETUP_GUIDE.txt       # This setup guide
+├── setup_automated.bat            # Automated setup script
+├── setup_automated.ps1            # PowerShell setup script
+│
+├── .venv\                         # Python virtual environment
+├── .git\                          # Git repository
+├── .vscode\                       # VS Code settings
+│
+├── src\                           # Python source code
+│   ├── orchestrator.py           # Main honeypot logic
+│   ├── session_manager.py        # Session handling
+│   ├── classifier.py             # Attack classification
+│   └── *.py                      # Other modules
+│
+├── scripts\                       # Utility scripts & runners
+│   ├── run_all.ps1               # Vagrant deployment
+│   ├── run_docker.ps1            # Docker deployment
+│   ├── run_demo.bat              # Local demo
+│   ├── verify_setup.ps1          # Setup verification
+│   └── *.ps1/*.bat               # Other utilities
+│
+├── tests\                         # Test files
+│   ├── test_*.py                 # Unit tests
+│   └── __pycache__\              # Compiled tests
+│
+├── docs\                          # Documentation (28 files)
+│   ├── README.md                 # Main documentation
+│   ├── START_HERE.md             # Quick start guide
+│   └── *.md                      # Other guides
+│
+├── config\                        # Configuration files
+│   ├── Vagrantfile               # VM configuration
+│   ├── docker-compose.yml        # Container configuration
+│   └── Dockerfile                # Container build
+│
+├── data\                          # Data files
+│   ├── GeoLite2-Country.mmdb     # IP geolocation database
+│   └── sessions\                  # Attack session data
+│       ├── S-*/                  # Individual sessions
+│       └── */meta.json           # Session metadata
+│
+├── output\                        # Generated reports & exports
+│   ├── honeypot_sessions.csv     # Aggregated session data
+│   ├── *.xlsx                    # Excel exports
+│   └── graphs\                   # Generated charts
+│
+├── logs\                          # Runtime logs
+│   ├── *.log                     # Application logs
+│   └── streamlit.log             # Dashboard logs
+│
+├── bin\                           # Executable scripts
+├── backend\                       # Backend components
+├── deploy\                        # Deployment helpers
+├── tools\                         # Development tools
+└── vagrant\                       # Vagrant provisioning scripts
+
+================================================================================
+## TROUBLESHOOTING GUIDE
+
+### Issue: "Port 8501 already in use"
+# Solution: Kill existing process
+netstat -ano | findstr :8501
+taskkill /PID [PID_NUMBER] /F
+# Then restart: .\scripts\run_demo.bat
+
+### Issue: "Python packages not found"
+# Solution: Activate virtual environment first
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+
+### Issue: "Vagrant VMs won't start"
+# Solution: Check VirtualBox and Vagrant
+vagrant --version
+VBoxManage list vms
+# Try: vagrant plugin install vagrant-vbguest
+
+### Issue: "Docker containers fail"
+# Solution: Clean up and restart
+docker system prune -a
+docker pull ubuntu:focal
+
+### Issue: "GeoIP database missing"
+# Solution: Download from MaxMind website
+# Place at: C:\project\data\GeoLite2-Country.mmdb
+
+### Issue: "Git clone fails"
+# Solution: Check repository URL and permissions
+git config --global user.name "Your Name"
+git config --global user.email "your.email@example.com"
+
+### Issue: "Streamlit won't start"
+# Solution: Check if port is free and venv is activated
+netstat -ano | findstr :8501
+.\.venv\Scripts\Activate.ps1
+python -m streamlit run app_auto.py --server.port 8501
+
+================================================================================
+## QUICK REFERENCE COMMANDS
+
+### Daily Usage:
+cd C:\project
+.\.venv\Scripts\Activate.ps1                    # Activate environment
+.\scripts\run_demo.bat                         # Run local demo
+http://localhost:8501                          # Open dashboard
+
+### Deployment Options:
+.\scripts\run_docker.ps1                       # Docker containers
+.\scripts\run_all.ps1                          # Vagrant VMs
+.\scripts\run_demo.bat                         # Local only
+
+### Maintenance:
+.\scripts\verify_setup.ps1                     # Check setup
+.\scripts\monitor_attacks.ps1                  # Monitor attacks
+.\scripts\get_router_ip.ps1                    # Find router IP
+
+### Development:
+python -m streamlit run app_auto.py            # Dashboard only
+python -m pytest tests\                        # Run tests
+git status                                     # Check git status
+
+================================================================================
+## SYSTEM ARCHITECTURE OVERVIEW
+
+### Honeypot Components:
+1. **Orchestrator** (src/orchestrator.py)
+   - Main honeypot server on port 2222
+   - Handles SSH connections and interactions
+
+2. **Session Manager** (src/session_manager.py)
+   - Tracks attack sessions and metadata
+
+3. **Classifier** (src/classifier.py)
+   - AI-powered attack type classification
+
+4. **Dashboard** (app_auto.py)
+   - Streamlit web interface for monitoring
+
+5. **Data Pipeline**
+   - Individual sessions → CSV files → Aggregated database
+
+### Network Architecture:
+- Honeypot: Port 2222 (internal) / 2222 (external when exposed)
+- Dashboard: Port 8501 (local only)
+- VMs/Containers: Isolated networks (192.168.56.x)
+
+================================================================================
+## SECURITY NOTES
+
+### For Internet Exposure:
+- Only expose port 2222 to internet (honeypot port)
+- Keep dashboard (8501) local only
+- Monitor logs regularly for real attacks
+- Consider VPN for admin access
+
+### Data Privacy:
+- Session data contains attacker information
+- GeoIP data is offline (no external calls)
+- All data stored locally in project folder
+
+================================================================================
+## SUPPORT & RESOURCES
+
+### Documentation Files:
+- docs/README.md              # Main project documentation
+- docs/START_HERE.md          # Internet exposure guide
+- docs/QUICK_START_GUIDE.md   # Local development guide
+
+### Useful Commands:
+help                           # Show available commands
+.\scripts\verify_setup.ps1     # Comprehensive system check
+dir data\sessions\             # View captured sessions
+
+### Getting Help:
+1. Run .\scripts\verify_setup.ps1 and check output
+2. Check logs\*.log files for errors
+3. Ensure virtual environment is activated
+4. Verify all prerequisites are installed
+
+================================================================================
+## FINAL CHECKLIST
+
+[ ] Chocolatey installed and working
+[ ] Python 3.8+ installed
+[ ] Git installed
+[ ] VirtualBox installed (for VMs)
+[ ] Vagrant installed (for VMs)
+[ ] Docker Desktop installed (for containers)
+[ ] Repository cloned to C:\project
+[ ] Virtual environment created and activated
+[ ] All Python packages installed
+[ ] GeoIP database downloaded and placed correctly
+[ ] Setup verification passed
+[ ] Deployment method chosen and working
+[ ] Dashboard accessible at http://localhost:8501
+[ ] Router port forwarding configured (for internet exposure)
+
+================================================================================
+END OF COMPLETE SETUP GUIDE - HAPPY HONEYPOT HUNTING! 🐝
+================================================================================

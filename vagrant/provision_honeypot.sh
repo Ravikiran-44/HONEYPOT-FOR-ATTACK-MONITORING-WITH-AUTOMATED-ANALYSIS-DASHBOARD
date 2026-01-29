@@ -10,6 +10,9 @@ PYTHON_BIN="/usr/bin/python3"
 export DEBIAN_FRONTEND=noninteractive
 apt-get update -y
 apt-get install -y python3 python3-venv python3-pip git screen curl build-essential
+sudo apt install -y virtualbox-guest-dkms virtualbox-guest-utils
+sudo modprobe vboxsf
+sudo reboot
 
 # Ensure directories and ownership
 mkdir -p "${DATA_DIR}"

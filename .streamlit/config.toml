@@ -1,0 +1,13 @@
+[theme]
+base="dark"
+backgroundColor="#0e1117"
+secondaryBackgroundColor="#161b22"
+primaryColor="#ff4b4b"
+textColor="#fafafa"
+
+[client]
+showErrorDetails=true
+toolbarMode="minimal"
+
+[logger]
+level="warning"
