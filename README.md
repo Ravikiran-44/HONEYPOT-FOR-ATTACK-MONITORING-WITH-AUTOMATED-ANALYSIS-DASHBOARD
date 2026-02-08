@@ -1,103 +1,217 @@
-# HONEYPOT FOR ATTACK MONITORING WITH AUTOMATED ANALYSIS DASHBOARD
 
-## Overview
+## 🛡️ Honeypot for Attack Monitoring with Automated Analysis Dashboard
 
-This project implements a production-style honeypot platform for collecting,
-enriching, and analysing network attack sessions, paired with an automated
-analysis dashboard. It is designed for research, monitoring, and demonstrations
-of attack telemetry, providing end-to-end ingestion, enrichment (GeoIP,
-timestamp normalization), automated classification of attack types, and
-visualization of results.
+**Developer:** Ravikiran.U
+**Stack:** Python • Streamlit • Pandas • NumPy • VM-based Honeypot • Automated Analysis
 
-Key goals:
-- Capture real-world attacker behaviour and payloads in structured session
-  records
-- Enrich and normalise captured data for reliable analysis
-- Provide an interactive dashboard for exploring attack trends and anomalies
-- Support reproducible demos and deployment via container / Vagrant tooling
+---
 
-## Key Features
+## 🚀 Project Overview
 
-- Lightweight honeypot components for session capture
-- Aggregation pipeline that watches CSV outputs and normalises session data
-- GeoIP enrichment using MaxMind GeoLite2
-- Automated attack-type inference and advisory panel
-- Streamlit-based dashboard with charts, timelines and drill-downs
-- Scripts for generating demo data and validating outputs
+This project implements a **honeypot-based attack monitoring system** designed to capture, analyze, and visualize real-world cyber attack behavior within a controlled environment.
 
-## Architecture
+The system deploys **intentionally exposed honeypot services inside a virtual machine**, records attacker interactions at the **session level**, validates and preprocesses the collected data, and performs **automated attack analysis** using rule-based and AI-ready logic.
+All analyzed results are presented through an **interactive Streamlit dashboard**, enabling clear forensic inspection and actionable security insights.
 
-Major components:
+---
 
-- `backend/` — server and database helpers
-- `scripts/` — ingestion, enrichment, aggregation, demo data generators
-- `output/`, `data/` — generated session CSVs and enriched outputs
-- `docs/` — deployment guides, evidence, and README templates
+## ⚙️ Architecture Overview
 
-The pipeline follows: capture -> CSV session write -> aggregator/normalizer ->
-enrichment -> dashboard visualization.
+| Phase | Name                | Description                                                   |
+| ----- | ------------------- | ------------------------------------------------------------- |
+| 1     | Honeypot Deployment | Vulnerable services deployed inside a VM to attract attackers |
+| 2     | Session Capture     | Attacker interactions captured as structured session logs     |
+| 3     | Data Validation     | Integrity checks and session verification                     |
+| 4     | Automated Analysis  | Attack classification and behavior analysis                   |
+| 5     | Visualization       | Analytical insights displayed via Streamlit dashboard         |
 
-## Quick Start
+---
 
-Prerequisites:
+## 🧩 Technologies Used
 
-- Python 3.8+ (tested on 3.10)
-- `pip` and virtual environment tooling
-- Optional: Docker and Vagrant for reproducible environments
+| Layer                | Tools / Libraries                     |
+| -------------------- | ------------------------------------- |
+| Honeypot Environment | VirtualBox / Vagrant                  |
+| Backend Processing   | Python                                |
+| Data Handling        | pandas, numpy                         |
+| Analysis Logic       | Rule-based logic with ML-ready design |
+| Visualization        | Streamlit                             |
+| Data Storage         | CSV-based session datasets            |
+| Testing & Validation | pytest                                |
 
-Minimal local run (development):
+---
 
-1. Create and activate a virtual environment:
+## 📦 Project Setup
 
-```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
+### Create Virtual Environment
+
+```bash
+python -m venv venv
+venv\Scripts\activate
+```
+
+### Install Dependencies
+
+```bash
 pip install -r requirements.txt
 ```
 
-2. Run the aggregator and demo server (examples):
+---
 
-```powershell
-python scripts/run_honeypot.py
-python scripts/aggregate.py
-python scripts/streamlit_app.py
+## 🧰 requirements.txt
+
+```
+pandas
+numpy
+streamlit
+pytest
+geoip2
 ```
 
-3. Open the dashboard (Streamlit) at the address printed in the console.
+---
 
-See `docs/QUICK_START.md` and `docs/DEPLOYMENT_READY.md` for full deployment
-instructions and production recommendations.
+## 🧠 Phase-Wise Execution Guide
 
-## Demo Data and Validation
+### 🔹 Phase 1: Honeypot Execution
 
-- Use `scripts/generate_demo_data.py` to create representative session data for
-  demos or offline analysis.
-- Use `scripts/verify_csv.py` and `scripts/verify_csv_writes.py` to validate
-  CSV outputs and atomic write behaviour.
+Runs the honeypot services inside a virtual machine to capture attacker interactions.
 
-## Deployment
+**Output structure:**
 
-This repository contains Docker and Vagrant artifacts for reproducible
-deployments. For production-like demonstration, follow the steps in
-`docs/QUICK_START_INTERNET.md` and `docs/DEPLOYMENT_READY.md`.
-
-## Contributing
-
-This is a student project; contributions are welcome but please follow the
-project guidelines in `docs/README.md`. When contributing:
-
-- Open an issue describing the change
-- Submit small, focused pull requests
-- Keep secrets and private keys out of the repository
-
-## License
-
-See `LICENSE` or repository metadata for license details.
-
-## Contact
-
-For questions about this submission, contact the repository owner.
+```
+data/sessions/
+ ├─ <session_id>/
+ │   ├─ meta.json
+ │   ├─ payload_*.bin
+```
 
 ---
-_Prepared for demonstration and evaluation: a complete honeypot pipeline with_
-_automated analysis and an interactive dashboard._
+
+### 🔹 Phase 2: Session Validation
+
+Validates captured data and removes incomplete or corrupted sessions.
+
+```bash
+python verify_meta_integrity.py
+```
+
+Only verified sessions are forwarded for analysis.
+
+---
+
+### 🔹 Phase 3: Data Processing & Enrichment
+
+Converts raw session data into a structured dataset and enriches it with metadata.
+
+```bash
+python merge_sessions.py
+```
+
+**Output:**
+
+```
+output/honeypot_sessions.csv
+```
+
+---
+
+### 🔹 Phase 4: Automated Attack Analysis
+
+Applies analytical logic to identify:
+
+* Attack types
+* Suspicious behavior
+* Session-level patterns
+
+```bash
+python generate_report.py
+```
+
+**Output includes:**
+
+* Automated attack insights
+* Summary statistics
+* Evidence-ready analytical reports
+
+---
+
+### 🔹 Phase 5: Visualization & Dashboard
+
+Launches the interactive Streamlit dashboard.
+
+```bash
+streamlit run streamlit_app.py
+```
+
+**Dashboard Features:**
+
+* Top attacker IPs
+* Attack type distribution
+* Port usage analysis
+* Time-series attack trends
+* Geographic attack visualization
+* Downloadable charts and reports
+
+---
+
+## 🖥️ Streamlit Dashboard
+
+**Key Highlights:**
+
+* Automatic graph generation
+* Live monitoring of processed session data
+* Clean and readable user interface
+* Export to Excel and PNG formats
+* Evidence-focused security insights
+
+The dashboard strictly reads data from:
+
+```
+output/honeypot_sessions.csv
+```
+
+---
+
+## 🧑‍💻 Recruiter Highlights
+
+* Real-world attack monitoring
+* VM-based honeypot deployment
+* Automated intrusion analysis
+* Session-level forensic evidence
+* Interactive analytics dashboard
+* Final-year project ready
+
+---
+
+## 🧩 Example Use Case
+
+1. Honeypot VM is deployed
+2. Attackers interact with exposed services
+3. Sessions are logged and validated
+4. Automated analysis detects attack patterns
+5. Dashboard visualizes threats and trends
+
+---
+
+## 🧠 Future Enhancements
+
+* Machine learning–based anomaly detection
+* Multi-honeypot correlation
+* Real-time alert generation
+* Advanced attacker profiling
+
+---
+
+## 🏁 Author
+
+**Ravikiran.U**
+AI & Data Science | Cybersecurity & Networking Enthusiast
+Final Year Project
+🔗 LinkedIn: [https://www.linkedin.com/in/ravikiranumapathy](https://www.linkedin.com/in/ravikiranumapathy)
+
+---
+
+⚡ **“Monitor the Attack. Analyze the Behavior. Strengthen the Defense.”** ⚡
+
+
+
