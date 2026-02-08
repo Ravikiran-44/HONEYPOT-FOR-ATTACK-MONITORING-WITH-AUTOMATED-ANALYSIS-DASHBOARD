@@ -206,7 +206,7 @@ output/honeypot_sessions.csv
 
 **Ravikiran.U**
 AI & Data Science | Cybersecurity & Networking Enthusiast
-Final Year Project
+
 🔗 LinkedIn: [https://www.linkedin.com/in/ravikiranumapathy](https://www.linkedin.com/in/ravikiranumapathy)
 
 ---
